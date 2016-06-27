@@ -17,15 +17,17 @@ library
   exposed-modules:     System.Process.Popen
   build-depends:       base >= 4.7 && < 5
   default-language:    Haskell2010
+  ghc-options:         -Wall
   C-Sources:           cbits/PopenShim.c
 
-executable hs-popen-exe
+executable ls-example-exe
   hs-source-dirs:      app
   main-is:             Main.hs
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , hs-popen
   default-language:    Haskell2010
+  C-Sources:           cbits/GetLine.c
 
 source-repository head
   type:     git

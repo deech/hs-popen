@@ -3,17 +3,15 @@ module System.Process.Popen
     popen,
     pclose,
     fileno,
-    getLine,
     CStream,
-    PopenMode(..)
+    PopenMode(..),
+    withCStream
   )
 where
 
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign.Ptr
-import Foreign.Marshal.Alloc
-import Prelude hiding (getLine)
 
 newtype CStream = CStream (Ptr ())
 data PopenMode = R | W deriving (Eq, Show)
@@ -40,25 +38,14 @@ pclose (CStream streamPtr) = do
 fileno :: CStream -> IO CInt
 fileno (CStream streamPtr) = filenoShim streamPtr
 
--- | Gets a line from the stream.
-getLine :: CStream -> IO (Maybe String)
-getLine (CStream streamPtr)= do
-  linePtr <- getLineShim streamPtr
-  if (linePtr == nullPtr)
-    then return Nothing
-    else do
-     line <- peekCString linePtr
-     free linePtr
-     return (Just line)
+withCStream :: CStream -> (Ptr () -> IO a) -> IO a
+withCStream (CStream streamPtr) f = f streamPtr
 
-foreign import ccall safe "Examples/PopenShim.H popenShim" popenShim ::
+foreign import ccall safe "cbits/PopenShim.H popenShim" popenShim ::
     Ptr CChar -> Ptr CChar -> IO (Ptr ())
 
-foreign import ccall safe "Examples/popenShim.H filenoShim" filenoShim ::
+foreign import ccall safe "cbits/popenShim.H filenoShim" filenoShim ::
     Ptr () -> IO CInt
 
-foreign import ccall safe "Examples/popenShim.H pcloseShim" pcloseShim ::
+foreign import ccall safe "cbits/popenShim.H pcloseShim" pcloseShim ::
     Ptr () -> IO CInt
-
-foreign import ccall safe "Examples/popenShim.H getLineShim" getLineShim ::
-    Ptr () -> IO (Ptr CChar)

@@ -16,10 +16,3 @@ int filenoShim(FILE* fd) {
 int pcloseShim(FILE* fd) {
   return pclose(fd);
 }
-
-char* getLineShim(FILE* fd){
-  char* s = malloc(1024 * sizeof(char));
-  if (fgets(s, 1023, fd) == NULL)
-    return NULL;
-  return s;
-}

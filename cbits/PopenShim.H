@@ -15,4 +15,3 @@
 FILE* popenShim(const char* command, const char* mode);
 int filenoShim(FILE* fd);
 int pcloseShim(FILE* fd);
-char* getLineShim(FILE* fd);
