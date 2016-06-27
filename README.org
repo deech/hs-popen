@@ -1,11 +1,16 @@
 * Description
-This is a tiny set of _portable_ bindings to `popen`, `pclose`, and `fileno`.
-This project exists because nothing I found on Hackage or in `base` allowed me
-to work with C pipes and raw file descriptors portably across Posix and Windows.
-Everything I found in the `base` seemed to require dealing with either `Handle`s
-or importing `System.Posix` which does not work on Windows.
+This is a tiny set of _portable_ bindings to ~popen~, ~pclose~, and ~fileno~.
+This project exists because I was trying to bind to C functions that read/write
+streams and require a raw file descriptors and nothing I found on Hackage or in
+~base~ allowed me to work with raw file descriptors portably across Posix and
+Windows.
+
+The ~base~ libraries do provide portable ~Handle~'s which work well if all
+stream processing is done within Haskell. However it turned out to be quite
+difficult to portably get and set a raw file descriptor from a ~Handle~.
+~System.Posix~ does provide this functionality but it does not work on Windows.
 * Installation
-Simply doing `stack install` should work.
+Simply doing ~stack install~ should work.
 * Demo
-To help you get started this project ships with an executable `hs-open-exe`
+To help you get started this project ships with an executable ~ls-example~
 which simply lists the files in the current directory.
